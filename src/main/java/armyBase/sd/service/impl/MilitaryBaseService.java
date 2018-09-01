@@ -1,5 +1,6 @@
 package armyBase.sd.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import armyBase.sd.dao.MilitaryBaseDAO;
 import armyBase.sd.dto.MilitaryBaseDTO;
 import armyBase.sd.exceptions.InvalidDataException;
 import armyBase.sd.model.MilitaryBase;
+import armyBase.sd.model.Soldier;
+import armyBase.sd.model.Training;
 import armyBase.sd.service.IMilitaryBaseService;
 
 @Component
@@ -75,6 +78,22 @@ public class MilitaryBaseService implements IMilitaryBaseService{
 	@Override
 	public void deleteById(Long id) {
 		militaryBaseDAO.deleteById(id);
+	}
+
+	@Override
+	public List<Soldier> getSoldiers(Long id) {
+		MilitaryBase base = militaryBaseDAO.findByIdMilitaryBase(id);
+		List<Soldier> soldiers = new ArrayList<>();
+		soldiers.addAll(base.getSoldiers());
+		return soldiers;
+	}
+
+	@Override
+	public List<Training> getTrainings(Long id) {
+		MilitaryBase base = militaryBaseDAO.findByIdMilitaryBase(id);
+		List<Training> trainings = new ArrayList<>();
+		trainings.addAll(base.getTraining());
+		return trainings;
 	}
 
 }

@@ -1,57 +1,60 @@
 <!Doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<title th:text="#{armyBase.soldierDetailsTitle}">Title</title>
+<meta charset="UTF-8" />
+<title th:text="#{armyBase.soldierDetailsTitle}">Title</title>
 
-	<th:block th:include="fragments/frag :: headerfiles">
-	</th:block>
+<th:block th:include="fragments/frag :: headerfiles">
+</th:block>
 
 </head>
 
 <body>
-	<div id = "soldierContext">
+	<div id="soldierContext">
 		<div>
 			<th:block th:replace="fragments/frag :: menu">
 			</th:block>
 		</div>
-		<div class = "w3-content">
-        <header class = "officialColor">
-        <h3>Soldier Details
-            <i style = "cursor:pointer; font-size:30px" class=" fa fa-arrow-left" aria-hidden="true"
-            th:title = "#{armyBase.common.back}" data-bind="click: $root.goBack" ></i>
-            <i style = "cursor:pointer; font-size:30px" class=" fa fa-trash" aria-hidden="true"
-             th:title = "#{armyBase.common.delete}" data-bind="click: $root.delete" ></i>
-            <i style = "cursor:pointer; font-size:30px" class="fa fa-pencil-square" aria-hidden="true"
-            th:title = "#{armyBase.common.update}" data-bind="click: $root.makeEditable" ></i>
-</h3>
-        </header>
-			<form class = "w3-card" data-bind = "with: soldier"> 
-				<div class="w3-row w3-container w3-padding">
+		<div class="w3-content">
+			<header class="officialColor">
+				<h3>
+					Soldier Details <i style="cursor: pointer; font-size: 30px"
+						class=" fa fa-arrow-left" aria-hidden="true"
+						th:title="#{armyBase.common.back}" data-bind="click: $root.goBack"></i>
+					<i style="cursor: pointer; font-size: 30px" class=" fa fa-trash"
+						aria-hidden="true" th:title="#{armyBase.common.delete}"
+						data-bind="click: $root.delete"></i> <i
+						style="cursor: pointer; font-size: 30px"
+						class="fa fa-pencil-square" aria-hidden="true"
+						th:title="#{armyBase.common.update}"
+						data-bind="click: $root.makeEditable"></i>
+				</h3>
+			</header>
+
+			<div
+				data-bind="template: { if : ready(), name: 'form-' + getMode(), data: soldier }">
+			</div>
+
+
+<script type="text/html" id="form-edit">
+   <form class="w3-card-4">
+				<div  class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
 						<label th:text="#{armyBase.soldierFullname}"></label>
 					</div>
 					<div class="w3-twothird">
-						<!-- ko if: $root.isEditable() -->
 						<input data-bind="value : name"></input>
-						<!-- /ko -->
-						<!-- ko ifnot: $root.isEditable() -->
-						<span data-bind="text : name"></span>
-						<!-- /ko -->
 					</div>
-				</div><hr>
+				</div>
+				<hr>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
 						<label th:text="#{armyBase.soldierDob}"></label>
 					</div>
 					<div class="w3-twothird">
-						<!-- ko if: $root.isEditable() -->
-						<input id="dob" type="date" data-bind="value : dob"></input>
-						<!-- /ko -->
-						<!-- ko ifnot: $root.isEditable() -->
-						<span data-bind="text : dob"></span>
-						<!-- /ko -->
+						<input id="soldierDob" type="date" data-bind="value : dob"></input>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
@@ -59,12 +62,7 @@
 						<label th:text="#{armyBase.soldierAlias}"></label>
 					</div>
 					<div class="w3-twothird">
-						<!-- ko if: $root.isEditable() -->
 						<input data-bind="value : alias"></input>
-						<!-- /ko -->
-						<!-- ko ifnot: $root.isEditable() -->
-						<span data-bind="text : alias"></span>
-						<!-- /ko -->
 					</div>
 				</div>
 
@@ -73,122 +71,31 @@
 						<label th:text="#{armyBase.soldierMilitaryBase}"> </label>
 					</div>
 					<div class="w3-twothird ">
-					<!-- ko if: $root.isEditable() -->
 						<select
-							data-bind="options : $root.baseArray, value : $root.baseToBeAdded ,optionsText : 'name'"></select>
-					<!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-						<span data-bind="text : base"></span>
-						<!-- /ko -->
+							data-bind="options : $root.baseArray, value : $root.baseToBeAdded,
+							 optionsText : 'name', optionsCaption: base"></select>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label  th:text="#{armyBase.soldierRank}"></label>
+						<label th:text="#{armyBase.soldierRank}"></label>
 					</div>
 					<div class="w3-twothird  ">
-					<!-- ko if: $root.isEditable() -->
-						<select data-bind =  "options : $root.rankArray, value : $root.rankToBeAdded ,optionsText : 'name'"></select>
-					<!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-						<span data-bind="text : rank"></span>
-						<!-- /ko -->
+						<select
+							data-bind="options : $root.rankArray, value : $root.rankToBeAdded, 
+							optionsText : 'name', optionsCaption: rank"></select>
 					</div>
 				</div>
+				
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label  th:text="#{armyBase.soldierOperations}"></label>
-					</div>
-					<div class="w3-twothird ">
-					<!-- ko if: $root.isEditable() -->
-					<input  data-bind="value : operations"></input>
-				    <!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-					<div data-bind="foreach: $root.operationsArray">
-					<div style = "margin-right:270px; margin-top : 2px; outline: 2px solid #CCC;border : 1px solid black">
-							<label style = "font-weight: bold"
-								th:text="#{armyBase.operationDescription}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : description"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationStatus}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : status"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationStartDate}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : startDate"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationEndDate}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : endDate"></p>
-						</div>
-					</div>
-					<!-- /ko -->
-						
-					</div>
-				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label  th:text="#{armyBase.soldierTagNumber}"></label>
+						<label th:text="#{armyBase.soldierTagNumber}"></label>
 					</div>
 					<div class="w3-twothird  ">
-					<!-- ko if: $root.isEditable() -->
-					<input  data-bind="value : tagNumber "></input>
-				    <!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-					<span  data-bind="text : tagNumber "></span>
-					<!-- /ko -->
+						<input data-bind="value : tagNumber "></input>
 					</div>
 				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label th:text="#{armyBase.soldierOperationsInCharge}"></label>
-					</div>
-					<div class="w3-twothird">
-					<!-- ko if: $root.isEditable() -->
-					<input  data-bind="value : operationsInCharge "></input>
-				    <!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-					<div data-bind="foreach: $root.operationsInChargeArray">
-					<div style = "margin-right:270px; margin-top : 2px; outline: 2px solid #CCC;border : 1px solid black">
-							<label style = "font-weight: bold"
-								th:text="#{armyBase.operationDescription}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : description"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationStatus}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : status"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationStartDate}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : startDate"></p>
-							<br> <label style="font-weight: bold"
-								th:text="#{armyBase.operationEndDate}"></label>
-							<p class="w3-padding" style="display: inline"
-								data-bind="text : endDate"></p>
-						</div>
-					</div>
-					<!-- /ko -->
-						
-					</div>
-				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label th:text="#{armyBase.soldierTrainingsInCharge}"></label>
-					</div>
-					<div class="w3-twothird ">
-					<!-- ko if: $root.isEditable() -->
-					<input  data-bind="value : trainingsInCharge "></input>
-				    <!-- /ko -->
-					<!-- ko ifnot: $root.isEditable() -->
-					<span  data-bind="text : trainingsInCharge "></span>
-					<!-- /ko -->
-						
-					</div>
-				</div>
-		
+
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-half w3-padding">
 						<button data-bind="click: $root.updateSoldier"
@@ -196,19 +103,163 @@
 						<button data-bind="click: $root.discard" class="w3-red w3-padding"
 							th:text="#{armyBase.common.discard}"></button>
 					</div>
-					<div class="w3-half w3-padding">
-						
+				</div>
+			</form>
+</script>
+
+<script type="text/html" id="form-view">
+   <form class="w3-card-4">
+					<div  class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierFullname}"></label>
 					</div>
-				</div>    
-            </form>
+					<div class="w3-twothird">
+						<span data-bind="text : name"></span>
+					</div>
+				</div>
+				<hr>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierDob}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : dob"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierAlias}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : alias"></span>
+					</div>
+				</div>
+
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierMilitaryBase}"> </label>
+					</div>
+					<div class="w3-twothird ">
+						<span data-bind="text : base"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierRank}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<span data-bind="text : rank"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding"
+					data-bind="visible: $root.operationsArray().length> 0 && !$root.isEditable()">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierOperations}"></label>
+					</div>
+					<div class="w3-twothird ">
+						<div data-bind="foreach: $root.operationsArray">
+							<div
+								style="margin-right: 270px; margin-top: 2px; outline: 2px solid #CCC; border: 1px solid black">
+								<label style="font-weight: bold"
+									th:text="#{armyBase.operationDescription}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : description"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationStatus}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : status"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationStartDate}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : startDate"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationEndDate}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : endDate"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierTagNumber}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<span data-bind="text : tagNumber "></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding"
+					data-bind="visible: $root.operationsInChargeArray().length > 0 && !$root.isEditable()">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierOperationsInCharge}"></label>
+					</div>
+					<div class="w3-twothird">
+						<div data-bind="foreach: $root.operationsInChargeArray">
+							<div
+								style="margin-right: 270px; margin-top: 2px; outline: 2px solid #CCC; border: 1px solid black">
+								<label style="font-weight: bold"
+									th:text="#{armyBase.operationDescription}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : description"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationStatus}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : status"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationStartDate}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : startDate"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.operationEndDate}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : endDate"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding"
+					data-bind="visible: $root.trainingsInChargeArray().length > 0 && !$root.isEditable()">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierTrainingsInCharge}"></label>
+					</div>
+					<div class="w3-twothird ">
+						<div data-bind="foreach: $root.trainingsInChargeArray">
+							<div
+								style="margin-right: 270px; margin-top: 2px; outline: 2px solid #CCC; border: 1px solid black">
+								<label style="font-weight: bold"
+									th:text="#{armyBase.trainingDescription}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : description"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.trainingInstructor}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : instructor"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.trainingStartTime}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : startTime"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.trainingEndTime}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : endTime"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.trainingBase}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : base"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+</form>
+		
+</script>
+
 		</div>
 	</div>
 	<div th:replace="fragments/frag :: footer"></div>
-	<script type = "text/javascript">
- 					dob.max = new Date().toISOString().split("T")[0]; 
- 				
- 				</script> 
-	 <script th:src="@{/js/SoldierDetailsVM.js}" type="text/javascript"></script>
+	
+	<script th:src="@{/js/SoldierDetailsVM.js}" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(function () {
 			var soldierDetailsVM = new SoldierDetailsVM({
@@ -217,7 +268,6 @@
 				idSoldier: [[${id}]]
 
 			});
-
 			ko.applyBindings(soldierDetailsVM, document.getElementById("soldierContext"));
 			soldierDetailsVM.loadData();
 		});

@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import armyBase.sd.dao.SoldierDAO;
 import armyBase.sd.dto.SoldierDTO;
@@ -68,6 +67,7 @@ public class SoldierService implements ISoldierService {
 	}
 
 	public Soldier update(SoldierDTO soldier) {
+		System.out.println(soldier.getBase()); 
 		Soldier s = getById(soldier.getIdSoldier());
 		if(soldier.getAlias()!=null)
 			s.setAlias(soldier.getAlias());

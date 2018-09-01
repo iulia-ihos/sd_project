@@ -18,6 +18,5 @@ public interface IOperationService{
 	public Operation update(OperationDTO op);
     public void deleteById(Long id);
     public List<Operation> getBySoldierInCharge(Long soldierId);
-
-    
+     
 }

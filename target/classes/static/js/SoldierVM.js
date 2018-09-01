@@ -21,26 +21,23 @@ function SoldierVM(initData) {
                     self.soldierArray.push(new SoldierViewModel(entry));               
                  });
                  console.log(self.soldierArray());
-            },
-            fail: function () {
-                alert("failed getting the data");
             }
         });
-
     }
 
-    
+ 
     self.getDetails = function (soldier) {
         window.location.assign("soldier/" + soldier.id);
     }
 
      self.openEditableSoldier = function () {
         self.soldierToBeAdded(new SoldierViewModel({
-            fullName : "", dob : new Date(),
+            fullName : "", 
+            dob : new Date(),
             tagNumber : "",
-            alias : "",rank : "", base : "",
-            operations : ""
+            alias : "",rank : "", base : ""
        }));  
+       self.setDob();
        self.openEditable(true);   
        self.getMilitaryBases();
        self.getRanks();
@@ -90,14 +87,28 @@ function SoldierVM(initData) {
             }
         });
     }
+    
+    self.setDob = function() {
+	    var now = new Date();
+		var day = ("0" + now.getDate()).slice(-2);
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+	    
+		self.soldierToBeAdded().dob(today);
+	               
+		$('#soldierDob').attr({
+					   "max" : today
+					});
+	               
+	    console.log(self.soldierToBeAdded().dob());
+	 }
 
     self.addSoldier = function () {
         var soldier = {
             fullName : self.soldierToBeAdded().name ,
-            dob : new Date(self.soldierToBeAdded().dob).toISOString().split("T")[0],
+            dob : self.soldierToBeAdded().dob(),
             tagNumber : self.soldierToBeAdded().tagNumber,
             alias : self.soldierToBeAdded().alias ,
-            soldierOperations : self.soldierToBeAdded().operations ,
             rank : {idRank  : self.rankToBeAdded().id,
                 rankName : self.rankToBeAdded().name
             },
@@ -164,5 +175,5 @@ function SoldierViewModel(data) {
     self.alias = data.alias;
     self.operations = data.soldierOperations;
     self.base = data.base.name;
-    self.dob = (data.dob == null)? "unknown" : moment(data.dob).format('ll');
+    self.dob = ko.observable((data.dob == null)? "unknown" : moment(data.dob).format('ll'));
 }

@@ -1,47 +1,67 @@
 function SoldierDetailsVM(initData) {
     var self = this;
+    
     self.urlBase = initData.urlBase;
     self.id = initData.idSoldier;
     self.soldier = ko.observable();
-   
-    console.log(self.id);
     
-    self.isEditable = ko.observable(false);
+    self.isEditable = ko.observable();
+    self.ready = ko.observable(false);
     
     self.operationsArray = ko.observableArray();
     self.operationsInChargeArray = ko.observableArray();
+    self.trainingsInChargeArray = ko.observableArray();
+    self.baseArray = ko.observableArray();
     self.baseToBeAdded = ko.observable();
     self.rankArray = ko.observableArray();
     self.rankToBeAdded = ko.observable();
 
-
+	self.getMode = ko.computed(function() {
+		if(self.isEditable()) {
+			return "edit";
+		}
+		return "view";
+	});
 
     self.delete = function (soldier) {
-    $.ajax({
-            type: "DELETE",
-            url: this.urlBase + "/deleteById/" + self.id,
-            success: function (data) {
-               console.log(data);
-               swal({
-                    title: "The soldier was deleted successfully!",
-                    onClose: () => {
-				     window.location.assign("/soldier"); 
-				  }
-                    });
-              
-            }, error: function(errors) {
-                
-                        swal({
-                    title: errors.responseJSON.message,
-                    icon: "error"
-                    });         
-            }
-        });
-    }
+    swal({
+		  title: 'Are you sure?',
+		  text: "You won't be able to revert this!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+		  if (result.value) {
+				$.ajax({
+					type: "DELETE",
+					url: this.urlBase + "/deleteById/" + self.id,
+					success: function (data) {
+					   console.log(data);
+						swal({
+							title: "The entity has been deleted successfully!",
+							onClose: () => {
+							 window.location.assign("/soldier"); }
+							});
+					},
+					error: function(errors) {   
+							swal({
+						title: errors.responseJSON.message,
+						type: "error"
+						});         
+					}
+				});
+			}			 
+		});
+	}
 
     self.loadData = function () {
+    	self.isEditable(false);
     	self.getOperations();
     	self.getOperationsInCharge();
+    	self.getTrainingsInCharge();
+    	
         $.ajax({
             type: "GET",
             url: this.urlBase + "/" + self.id,
@@ -49,7 +69,10 @@ function SoldierDetailsVM(initData) {
             dataType: "json",
             success: function (data) {
                console.log(data);
-               self.soldier(new SoldierDetailsViewModel(data));
+               self.soldier(new SoldierDetailsViewModel(data,"view"));
+               self.ready(true);
+               self.rankToBeAdded(new RankViewModel(data.rank));
+               self.baseToBeAdded(new MilitaryBaseViewModel(data.base));
             },
             fail: function () {
                 alert("failed getting the data");
@@ -57,31 +80,38 @@ function SoldierDetailsVM(initData) {
         });
 
     }
-
-    
+ 
     self.goBack = function () {
         window.location.assign("/soldier");
     }
 
-     self.makeEditable = function () {    
+     self.makeEditable = function () { 
+       self.soldier().mode("edit"); 
+       self.setDob(); 
        self.isEditable(true);  
        self.getMilitaryBases(); 
+       self.getRanks();
+      
     }
 
     self.getMilitaryBases = function() {
          $.ajax({
             type: "GET",
-            url: "base/getAll",
+            url: "/base/getAll",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
                 console.log(data);
                 self.baseArray.removeAll();
                 data.forEach(function(entry) {
-                    self.baseArray.push(new MilitaryBaseViewModel(entry));               
+                if(entry.name !="" && entry.name!= self.soldier().base()){
+                console.log(entry.name);
+                console.log(self.soldier().base);
+                    self.baseArray.push(new MilitaryBaseViewModel(entry));  
+                    }             
                  });
                  console.log(self.baseArray());
-                 self.baseToBeAdded(self.baseArray()[0]);
+                
             },
             fail: function () {
                 alert("failed getting the data");
@@ -92,17 +122,17 @@ function SoldierDetailsVM(initData) {
      self.getRanks = function() {
          $.ajax({
             type: "GET",
-            url: "rank/getAll",
+            url: "/rank/getAll",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
                 console.log(data);
                 self.rankArray.removeAll();
                 data.forEach(function(entry) {
+                if(entry.rankName!= self.soldier().rank())
                     self.rankArray.push(new RankViewModel(entry));               
                  });
                  console.log(self.rankArray());
-                 self.rankToBeAdded(self.rankArray()[0]);
             },
             fail: function () {
                 alert("failed getting the data");
@@ -138,8 +168,7 @@ function SoldierDetailsVM(initData) {
             self.operationsInChargeArray.removeAll();
                 console.log(data);
                   data.forEach(function(entry) {
-                    self.operationsInChargeArray.push(new OperationViewModel(entry));  
-                  console.log(self.operationsArray());             
+                    self.operationsInChargeArray.push(new OperationViewModel(entry));               
                  });
             },
             fail: function () {
@@ -147,80 +176,76 @@ function SoldierDetailsVM(initData) {
             }
         });
     }
-
-    self.addSoldier = function () {
-        var soldier = {
-            fullName : self.soldierToBeAdded().name ,
-            dob : self.soldierToBeAdded().dob,
-            tagNumber : self.soldierToBeAdded().tagNumber,
-            alias : self.soldierToBeAdded().alias ,
-            soldierOperations : self.soldierToBeAdded().operations ,
-            rank : {idRank  : self.rankToBeAdded().id,
-                rankName : self.rankToBeAdded().name
-            },
-            base : {idMilitaryBase : self.baseToBeAdded().id,
-               name : self.baseToBeAdded().name
-            }
-        }
-        console.log(soldier);
-        $.ajax({
-            type: "POST",
-            url: self.urlBase + "/add",
+    
+     self.getTrainingsInCharge = function() {
+         $.ajax({
+            type: "GET",
+            url: self.urlBase + "/getTrainingsInCharge/"+ self.id,
             contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data : JSON.stringify(soldier),
             success: function (data) {
-                self.soldierArray.push(new SoldierViewModel(data));
-                swal({
-                    title: "The soldier was added successfully!",
-                    icon: "success"
-                    });
-                self.openEditableSoldier(false);
-            },
-            error: function(errors) {
+            console.log(data);
+            	self.trainingsInChargeArray.removeAll();
                 
-                        swal({
-                    title: errors.responseJSON.message,
-                    icon: "error"
-                    });         
+                  data.forEach(function(entry) {
+                    self.trainingsInChargeArray.push(new TrainingViewModel(entry));      
+                 });
+            },
+            fail: function () {
+                alert("failed getting the data");
             }
         });
     }
     
+	self.setDob = function() {
+	    var now = new Date();
+		var day = ("0" + now.getDate()).slice(-2);
+		var month = ("0" + (now.getMonth() + 1)).slice(-2);
+		var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+	    
+	    var birthDate = new Date(self.soldier().dob());
+		var birthDay = ("0" + birthDate.getDate()).slice(-2);
+		var birthMonth = ("0" + (birthDate.getMonth() + 1)).slice(-2);
+		var sDob = birthDate.getFullYear()+"-"+(birthMonth)+"-"+(birthDay);
+		self.soldier().dob(sDob);
+	               
+		$('#soldierDob').attr({
+					   "max" : today
+					});
+	               
+	    console.log(self.soldier());
+	 }
+
+
      self.updateSoldier = function () {
         var soldier = {
-            fullName : self.soldierUpdated().name ,
-            dob : self.soldier().dob,
-            tagNumber : self.soldier().tagNumber,
-            alias : self.soldier().alias ,
-            soldierOperations : self.soldier().operations ,
-            rank : {idRank  : self.rankToBeAdded().id,
-                rankName : self.rankToBeAdded().name
-            },
-            base : {idMilitaryBase : self.baseToBeAdded().id,
-               name : self.baseToBeAdded().name
-            }
+        	idSoldier : self.id, 
+            fullName : self.soldier().name() ,
+            dob : self.soldier().dob(),
+            tagNumber : self.soldier().tagNumber(),
+            alias : self.soldier().alias() ,
+            rank : self.rankToBeAdded(),
+            base : self.baseToBeAdded()
         }
         console.log(soldier);
         $.ajax({
-            type: "POST",
-            url: self.urlBase + "/add",
+            type: "PUT",
+            url: self.urlBase + "/update",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data : JSON.stringify(soldier),
             success: function (data) {
-                self.soldierArray.push(new SoldierViewModel(data));
                 swal({
-                    title: "The soldier was added successfully!",
-                    icon: "success"
+                    title: "The update was succesfull!",
+                    type: "success",
+                    onClose: () => {
+				     location.reload(); 
+				  }
                     });
-                self.openEditableSoldier(false);
+                self.isEditable(false);
             },
             error: function(errors) {
-                
                         swal({
                     title: errors.responseJSON.message,
-                    icon: "error"
                     });         
             }
         });
@@ -228,20 +253,20 @@ function SoldierDetailsVM(initData) {
     }
 
     self.discard = function () {
-        self.openEditable(false);    
+        self.isEditable(false);    
     }
 
 }
 
 function MilitaryBaseViewModel(data) {
     var self = this;
-    self.id = data.idMilitaryBase;
+    self.idMilitaryBase = data.idMilitaryBase;
     self.name = data.name;
 }
 
 function RankViewModel(data) {
     var self = this;
-    self.id = data.idRank;
+    self.idRank = data.idRank;
     self.name = data.rankName;
 }
 
@@ -255,16 +280,26 @@ function OperationViewModel(data) {
     self.startDate = (data.startDate == null)? "unknown" : moment(data.startDate).format('MMMM Do YYYY, h:mm:ss a');
 }
 
-function SoldierDetailsViewModel(data) {
+function TrainingViewModel(data) {
     var self = this;
 
+    self.description = data.description;
+    self.instructor = data.instructor.rank.rankName + " " + data.instructor.fullName;
+    self.endTime = (data.endTime == null)? "unknown" : moment(data.endTime).format('MMMM Do YYYY, h:mm:ss a');
+    self.startTime = (data.startTime == null)? "unknown" : moment(data.startTime).format('MMMM Do YYYY, h:mm:ss a');
+    self.base = data.trainingBase.name;
+}
+
+function SoldierDetailsViewModel(data,mode) {
+    var self = this;
+
+    self.mode = ko.observable(mode);
+    
     self.id = data.idSoldier;
     self.name = ko.observable(data.fullName);
     self.rank = ko.observable(data.rank.rankName);
     self.tagNumber = ko.observable(data.tagNumber);
     self.alias = ko.observable(data.alias);
     self.base = ko.observable(data.base.name);
-    self.dob = (data.dob == null)? "unknown" : moment(data.dob).format('ll');
-    self.operationsInCharge = data.operationsInCharge;
-    self.trainingsInCharge = data.trainingsInCharge;
+    self.dob = ko.observable((data.dob == null)? "unknown" : moment(data.dob).format('ll'));
 }

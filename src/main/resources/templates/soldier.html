@@ -53,7 +53,7 @@
 			</table>
 		</div>
 		<br><br>
-		<div class="w3-content" data-bind = "visible: openEditable()">
+		<div  style = "padding-top:0px" class="w3-content" data-bind = "visible: openEditable()">
 		<header th:text = "#{armyBase.soldier.add}" class = "officialColor w3-centered w3-padding" ></header>
 			<form class="w3-card" data-bind="with: soldierToBeAdded">
 				<div class="w3-row w3-container w3-padding">
@@ -69,7 +69,7 @@
 						<label  th:text="#{armyBase.soldierDob}"></label>
 					</div>
 					<div class="w3-twothird">
-						<input id = "dob"
+						<input id = "soldierDob"
 						type = "date" data-bind="value : dob"></input>
 					</div>
 				</div>
@@ -100,15 +100,6 @@
 						<select data-bind =  "options : $root.rankArray, value : $root.rankToBeAdded ,optionsText : 'name'"></select>
 					</div>
 				</div>
-
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label  th:text="#{armyBase.soldierOperations}"></label>
-					</div>
-					<div class="w3-twothird ">
-						<input  data-bind="value : operations"></input>
-					</div>
-				</div>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
 						<label  th:text="#{armyBase.soldierTagNumber}"></label>
@@ -134,9 +125,7 @@
 		</div>
 	</div>
 	<div th:replace="fragments/frag :: footer"></div>
-	<script type = "text/javascript">
- 					dob.max = new Date().toISOString().split("T")[0]; 
- 				</script> 
+ 
  	<script th:src="@{/js/SoldierVM.js}" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(function () {

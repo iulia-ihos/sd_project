@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import armyBase.sd.dto.MilitaryBaseDTO;
 import armyBase.sd.exceptions.InvalidDataException;
 import armyBase.sd.model.MilitaryBase;
+import armyBase.sd.model.Soldier;
+import armyBase.sd.model.Training;
 import armyBase.sd.service.IMilitaryBaseService;
 
 
@@ -41,6 +43,15 @@ public class MilitaryBaseController {
 		        }
 		}
 	    
+	    @GetMapping("getSoldiers/{id}")
+		public List<Soldier> getSoldiers(@PathVariable Long id) {
+		       return baseService.getSoldiers(id);
+		}
+	    
+	    @GetMapping("getTrainings/{id}")
+		public List<Training> gettrainings(@PathVariable Long id) {
+		       return baseService.getTrainings(id);
+		}
 	
 		@PostMapping("add")
 		public MilitaryBase add(@RequestBody MilitaryBaseDTO base) throws InvalidDataException

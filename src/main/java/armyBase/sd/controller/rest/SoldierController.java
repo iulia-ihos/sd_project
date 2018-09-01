@@ -30,8 +30,6 @@ import armyBase.sd.service.ISoldierService;
 import armyBase.sd.service.ITrainingService;
 import armyBase.sd.service.IUserService;
 
-
-
 @RestController
 @RequestMapping("rest/soldier")
 public class SoldierController {
@@ -109,12 +107,7 @@ public class SoldierController {
 	    
 		@PutMapping("update")
 		public Soldier update(@RequestBody SoldierDTO soldier) {
-		        try {
-		            return soldierService.update(soldier);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		       return soldierService.update(soldier);
 		    }
         
 	    
@@ -156,7 +149,7 @@ public class SoldierController {
 			 return opService.getBySoldierInCharge(id);
 			}
 		 
-		 @GetMapping("gettrainingsInCharge/{id}")
+		 @GetMapping("getTrainingsInCharge/{id}")
 			public List<Training> getTrainingsInCharge(@PathVariable Long id) {
 			 return trainingService.getBySoldierInCharge(id);
 			}

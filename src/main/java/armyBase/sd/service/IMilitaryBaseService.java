@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import armyBase.sd.dto.MilitaryBaseDTO;
 import armyBase.sd.exceptions.InvalidDataException;
 import armyBase.sd.model.MilitaryBase;
+import armyBase.sd.model.Soldier;
+import armyBase.sd.model.Training;
 
 
 
@@ -19,5 +21,7 @@ public interface IMilitaryBaseService{
 	public MilitaryBase getById(Long id);
 	public MilitaryBase update(MilitaryBaseDTO base);
     public void deleteById(Long id);
+    public List<Soldier> getSoldiers(Long id);
+    public List<Training> getTrainings(Long id);
 
 }
