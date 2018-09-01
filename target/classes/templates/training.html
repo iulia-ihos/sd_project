@@ -1,0 +1,57 @@
+<!Doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title th:text = "#{armyBase.trainingTitle}">Title</title>
+
+<th:block th:include="fragments/frag :: headerfiles">
+        </th:block>
+
+</head>
+<body>
+	<div id = "trainingContext">
+	<div>
+		<th:block th:replace ="fragments/frag :: menu">
+        </th:block>
+	</div>
+	<table>
+		<thead>
+			<tr>
+				<th th:text = "#{armyBase.trainingId}"></th>
+				<th th:text = "#{armyBase.trainingDescription}"></th>
+				<th th:text = "#{armyBase.trainigDate}"></th>
+				<th th:text = "#{armyBase.trainingInstructor}"></th>
+				<th th:text = "#{armyBase.trainingBase}"></th>
+				<th th:text = "#{armyBase.armyBase.common.details}"></th>
+			</tr>
+		</thead>	
+		<tbody data-bind="foreach: trainingArray">
+			<tr>
+				<td data-bind="text: id"></td>
+				<td><input data-bind="value: description" /></td>
+				<td><input data-bind="value: date" /></td>
+				<td><input data-bind="value: instructor" /></td>
+				<td><input data-bind="value: base" /></td>
+				<td><input data-bind="value: operations" /></td>
+				<td><a href="#" data-bind="click: $root.removeSoldier">Remove</a></td>
+			</tr>
+		</tbody>
+		
+	</table>
+</div>
+    <div th:replace="fragments/frag :: footer"></div>
+	<script type="text/javascript">
+	 $(function() {
+                        var trainingVM = new TrainingVM({
+                            contextPath : '[[@{/}]]',
+                            urlBase : '[[@{/training}]]',
+
+                        });
+                
+				ko.	applyBindings(trainingVM,document.getElementById("trainingContext"));
+				trainingVM.loadData();
+			});
+	</script>
+	
+</body>
+</html>

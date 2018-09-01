@@ -1,0 +1,155 @@
+<!Doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<title th:text="#{armybase.soldierTitle}">Title</title>
+
+<th:block th:include="fragments/frag :: headerfiles">
+</th:block>
+
+</head>
+
+<body>
+	<div id="soldierContext">
+		<div>
+			<th:block th:replace="fragments/frag :: menu">
+			</th:block>
+		</div>
+			<th:block th:replace="fragments/frag :: date">
+			</th:block>
+	
+		<br> <br>
+		<div class="w3-content">
+			<i class="fa fa-plus" th:title="#{armyBase.soldier.add}"
+				data-bind="click: $root.openEditableSoldier" aria-hidden="true"
+				style="font-size: 35px; cursor: pointer"> </i>
+			<table
+				class="w3-table w3-striped w3-centered w3-hoverable w3-padding bordered">
+				<thead class="officialColor">
+					<tr>
+						<th th:text="#{armyBase.soldierFullname}"></th>
+						<th th:text="#{armyBase.soldierAlias}"></th>
+						<th th:text="#{armyBase.soldierMilitaryBase}"></th>
+						<th th:text="#{armyBase.soldierRank}"></th>
+						<th th:text="#{armyBase.soldierDob}"></th>
+						<th th:text="#{armyBase.common.details}"></th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: soldierArray">
+					<tr>
+						<td data-bind="text: name"></td>
+						<td data-bind="text: alias"></td>
+						<td data-bind="text: base"></td>
+						<td data-bind="text: rank"></td>
+						<td data-bind="text: dob"></td>
+						<td><i class="fa fa-info-circle" style="font-size:25px; cursor:pointer"
+							th:title="#{armyBase.common.details}"
+							data-bind="click: $root.getDetails" aria-hidden="true"></i></td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+		<br><br>
+		<div class="w3-content" data-bind = "visible: openEditable()">
+		<header th:text = "#{armyBase.soldier.add}" class = "officialColor w3-centered w3-padding" ></header>
+			<form class="w3-card" data-bind="with: soldierToBeAdded">
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierFullname}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input  data-bind="value : name"></input>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierDob}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input id = "dob"
+						type = "date" data-bind="value : dob"></input>
+					</div>
+				</div>
+				
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierAlias}"></label>
+
+					</div>
+					<div class="w3-twothird  ">
+						<input data-bind="value : alias"></input>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierMilitaryBase}">
+						</label>
+					</div>
+					<div class="w3-twothird ">
+						<select data-bind =  "options : $root.baseArray, value : $root.baseToBeAdded ,optionsText : 'name'"></select>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierRank}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<select data-bind =  "options : $root.rankArray, value : $root.rankToBeAdded ,optionsText : 'name'"></select>
+					</div>
+				</div>
+
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierOperations}"></label>
+					</div>
+					<div class="w3-twothird ">
+						<input  data-bind="value : operations"></input>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.soldierTagNumber}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<input  data-bind="value : tagNumber "></input>
+					</div>
+				</div>
+		
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-half w3-padding">
+						<button data-bind="click: $root.addSoldier"
+							class="w3-blue w3-padding" th:text="#{armyBase.common.add}"></button>
+						<button data-bind="click: $root.discard" class="w3-red w3-padding"
+							th:text="#{armyBase.common.discard}"></button>
+					</div>
+					<div class="w3-half w3-padding">
+						
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<div th:replace="fragments/frag :: footer"></div>
+	<script type = "text/javascript">
+ 					dob.max = new Date().toISOString().split("T")[0]; 
+ 				</script> 
+ 	<script th:src="@{/js/SoldierVM.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function () {
+			var soldierVM = new SoldierVM({
+				contextPath: '[[@{/}]]',
+				urlBase: '[[@{rest/soldier}]]',
+
+			});
+			ko.applyBindings(soldierVM, document.getElementById("soldierContext"));
+			soldierVM.loadData();
+		});
+	</script>
+
+</body>
+
+</html>

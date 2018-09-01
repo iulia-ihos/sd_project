@@ -1,0 +1,137 @@
+<!Doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<title th:text = "#{armyBase.baseTitle}">Title</title>
+
+<th:block th:include="fragments/frag :: headerfiles">
+        </th:block>
+
+</head>
+<body>
+	<div id = "baseContext">
+	<div>
+		<th:block th:replace ="fragments/frag :: menu">
+        </th:block>
+	</div>
+			<div class="w3-content">
+			<i class="fa fa-plus" th:title="#{armyBase.base.add}"
+				data-bind="click: $root.openEditableBase" aria-hidden="true"
+				style="font-size: 35px; cursor: pointer"> </i>
+			<table
+				class="w3-table w3-striped w3-centered w3-hoverable w3-padding bordered">
+				<thead class="officialColor">
+					<tr>
+						<th th:text="#{armyBase.baseName}"></th>
+						<th th:text="#{armyBase.baseLatitude}"></th>
+						<th th:text="#{armyBase.baseLongitude}"></th>
+						<th th:text="#{armyBase.common.details}"></th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: baseArray">
+					<tr>
+						<td data-bind="text: name"></td>
+						<td data-bind="text: latitude"></td>
+						<td data-bind="text: longitude"></td>
+						<td><i class="fa fa-info-circle"
+							th:title="#{armyBase.common.details}"
+							style = "cursor : pointer"
+							data-bind="click: $root.getDetails" aria-hidden="true"></i></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br><br>
+		<div class="w3-content" data-bind = "visible: openEditable()">
+		<header th:text = "#{armyBase.base.add}" class = "officialColor w3-centered w3-padding" ></header>
+			<form class="w3-card" data-bind="with: baseToBeAdded">
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.baseName}"></label>
+
+					</div>
+					<div class="w3-twothird  ">
+						<input data-bind="value : name"></input>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.baseDescription}"></label>
+					</div>
+					<div class="w3-twothird">
+						<textarea rows="7" cols="50" data-bind="value : description"></textarea>
+						<p data-bind = "text: $root.charCount"/>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.baseLongitude}"></label>
+					</div>
+					<div class="w3-twothird" data-bind="with: $root.dmsLon">
+						<input data-bind="value : days"></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.days}" ></p><br>
+						<input data-bind="value : minutes" ></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.minutes}" ></p><br>
+						<input data-bind="value : seconds"></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.seconds}" ></p><br>
+						<select data-bind =  "options : $root.longitudeOptions, value : direction"></select>
+
+					</div>
+				</div>
+				
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.baseLatitude}"></label>
+
+					</div>
+					<div class="w3-twothird " data-bind="with: $root.dmsLat">
+						<input data-bind="value : days"></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.days}" ></p><br>
+						<input data-bind="value : minutes" ></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.minutes}" ></p><br>
+						<input data-bind="value : seconds"></input>
+						<p style="display: inline"
+								th:text = "#{armyBase.seconds}" ></p><br>
+						<select data-bind =  "options : $root.latitudeOptions, value : direction"></select>
+					</div>
+				</div>
+		
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-half w3-padding">
+						<button data-bind="click: $root.addBase"
+							class="w3-blue w3-padding" th:text="#{armyBase.common.add}"></button>
+						<button data-bind="click: $root.discard" class="w3-red w3-padding"
+							th:text="#{armyBase.common.discard}"></button>
+					</div>
+					<div class="w3-half w3-padding">
+						
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	
+
+    <div th:replace="fragments/frag :: footer"></div>
+    <script th:src="@{/js/MilitaryBaseVM.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+	 $(function() {
+                        var militaryBaseVM = new MilitaryBaseVM({
+                            contextPath : '[[@{/}]]',
+                            urlBase : '[[@{/base}]]',
+
+                        });
+                
+				ko.	applyBindings(militaryBaseVM,document.getElementById("baseContext"));
+				militaryBaseVM.loadData();
+			});
+	</script>
+	
+</body>
+</html>
