@@ -103,37 +103,32 @@ function MilitaryBaseVM(initData) {
 }
 
 function fromDMS2DD(dms) {
-console.log(dms)
     var days = parseFloat(dms.days);
     var minutes = dms.minutes;
     var seconds = dms.seconds;
     var direction = dms.direction;
     direction.toUpperCase();
     var dd = days + minutes/60 + seconds/(60*60);
-    //alert(dd);
+
     if (direction == "S" || direction == "W") {
         dd = dd*-1;
     } // Don't do anything for N or E
-    console.log(dd);
     return dd;
 }
 
 function fromDD2DMS(dms, type){
-
     var sign = 1, Abs=0;
     var days, minutes, sec, direction;
 
     if(dms < 0)  { sign = -1; }
     Abs = Math.abs( Math.round(dms * 1000000.));
     //Math.round is used to eliminate the small error caused by rounding in the computer:
-    //e.g. 0.2 is not the same as 0.20000000000284
+  
     //Error checks
     if(type == "lat" && Abs > (90 * 1000000)){
-        //alert(" Degrees Latitude must be in the range of -90. to 90. ");
-        return false;
+        return "...";
     } else if(type == "lon" && Abs > (180 * 1000000)){
-        //alert(" Degrees Longitude must be in the range of -180 to 180. ");
-        return false;
+        return "...";
     }
 
     days = Math.floor(Abs / 1000000);
@@ -142,8 +137,8 @@ function fromDD2DMS(dms, type){
     days = days * sign;
     if(type == 'lat') direction = days<0 ? 'S' : 'N';
     if(type == 'lon') direction = days<0 ? 'W' : 'E';
-    //else return value     
-    return (days * sign) + 'º ' + minutes + "' " + sec + "'' " + direction;
+   
+    return (days * sign) + '° ' + minutes + "' " + sec + "'' " + direction;
 }
 
 function MilitaryBaseViewModel(data) {
@@ -153,5 +148,4 @@ function MilitaryBaseViewModel(data) {
     self.longitude = fromDD2DMS(data.longitude,"lon");
     self.description = ko.observable(data.description);
     self.name = data.name;
-    console.log(self.description());
 }

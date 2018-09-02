@@ -1,0 +1,208 @@
+<!Doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<title th:text="#{armyBase.trainingDetailsTitle}">Title</title>
+
+<th:block th:include="fragments/frag :: headerfiles">
+</th:block>
+
+</head>
+
+<body>
+	<div id="trainingContext">
+		<div>
+			<th:block th:replace="fragments/frag :: menu">
+			</th:block>
+		</div>
+		<div class="w3-content">
+			<header class="officialColor">
+				<h3>
+					Training Details <i style="cursor: pointer; font-size: 30px"
+						class=" fa fa-arrow-left" aria-hidden="true"
+						th:title="#{armyBase.common.back}" data-bind="click: $root.goBack"></i>
+					<i style="cursor: pointer; font-size: 30px" class=" fa fa-trash"
+						aria-hidden="true" th:title="#{armyBase.common.delete}"
+						data-bind="click: $root.delete"></i> <i
+						style="cursor: pointer; font-size: 30px"
+						class="fa fa-pencil-square" aria-hidden="true"
+						th:title="#{armyBase.common.update}"
+						data-bind="click: $root.makeEditable"></i>
+				</h3>
+			</header>
+
+			<div
+				data-bind="template: { if : ready(), name: 'form-' + getMode(), data: training }">
+			</div>
+
+
+<script type="text/html" id="form-edit">
+   <form class="w3-card-4">
+				<div  class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingDescription}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input data-bind="value : description"></input>
+					</div>
+				</div>
+				<hr>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingInstructor}"></label>
+					</div>
+					<div class="w3-twothird">
+						<select data-bind =  "options : $root.soldierArray, value : $root.soldierToBeAdded ,optionsText : 'name'"></select>
+					    <span style="display:inline">or</span>
+					    <button data-bind="click: $root.getSoldierByTagNumber" class="w3-black w3-small"
+							th:text="#{armyBase.common.getSoldier}"
+							th:title = "#{armyBase.common.getSoldierHover}"
+							style = "cursor:pointer"></button>
+						<input class = "boxStyle" data-bind  = "value : $root.tagNumber"></input>
+						<br><br>
+						<span>Selected instructor: </span>
+						<span style = "display:inline" id = "selectedSoldier"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingBase}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input data-bind="value : alias"></input>
+					</div>
+				</div>
+
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.soldierMilitaryBase}"> </label>
+					</div>
+					<div class="w3-twothird ">
+						<select data-bind =  "options : $root.baseArray, 
+						value : $root.baseToBeAdded ,optionsText : 'name'"></select>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.trainingStartTime}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input id = "dateTime"
+						type = "datetime-local" data-bind="value : startTime"></input>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label  th:text="#{armyBase.trainingEndTime}"></label>
+					</div>
+					<div class="w3-twothird">
+						<input id = "dateTime"
+						type = "datetime-local" data-bind="value : endTime"></input>
+					</div>
+				</div>
+
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-half w3-padding">
+						<button data-bind="click: $root.updateTraining"
+							class="w3-blue w3-padding" th:text="#{armyBase.common.update}"></button>
+						<button data-bind="click: $root.discard" class="w3-red w3-padding"
+							th:text="#{armyBase.common.discard}"></button>
+					</div>
+				</div>
+			</form>
+</script>
+
+<script type="text/html" id="form-view">
+   <form class="w3-card-4">
+			   <div  class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingDescription}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : decsription"></span>
+					</div>
+				</div>
+				<hr>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingInstructor}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : instructor"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingBase}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : base"></span>
+					</div>
+				</div>
+
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingStartTime}"> </label>
+					</div>
+					<div class="w3-twothird ">
+						<span data-bind="text : startTime"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.trainingEndTime}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<span data-bind="text : endTime"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding"
+					data-bind="visible: $root.soldierArray().length > 0">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.operationSoldiers}"></label>
+					</div>
+					<div class="w3-twothird">
+						<div data-bind="foreach: $root.soldierArray"
+							style="margin-right: 270px; margin-top: 2px; outline: 2px solid #CCC; border: 1px solid black">
+								<label style="font-weight: bold"
+									th:text="#{armyBase.soldierName}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : name"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.soldierRank}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : rank"></p>
+								<br> <label style="font-weight: bold"
+									th:text="#{armyBase.soldierTagNumber}"></label>
+								<p class="w3-padding" style="display: inline"
+									data-bind="text : tagNumber"></p>
+						</div>
+					</div>
+				</div>
+</form>
+		
+</script>
+
+		</div>
+	</div>
+	<div th:replace="fragments/frag :: footer"></div>
+	
+	<script th:src="@{/js/TrainingDetailsVM.js}" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(function () {
+			var trainingDetailsVM = new TrainingDetailsVM({
+				contextPath: '[[@{/}]]',
+				urlBase: '[[@{/training}]]',
+				idTraining: [[${id}]]
+
+			});
+			ko.applyBindings(trainingDetailsVM, document.getElementById("trainingContext"));
+			trainingDetailsVM.loadData();
+		});
+	</script>
+
+</body>
+
+</html>

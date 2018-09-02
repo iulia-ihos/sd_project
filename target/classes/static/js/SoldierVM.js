@@ -127,11 +127,12 @@ function SoldierVM(initData) {
                 self.soldierArray.push(new SoldierViewModel(data));
                 swal({
                     title: "The soldier was added successfully!",
+                    type: 'success',
                     onClose: () => {
 				     window.location.assign("/soldier"); 
 				  }
                     });
-                self.openEditableSoldier(false);
+                self.openEditable(false);
             },
             fail: function () {
                 alert("failed post");

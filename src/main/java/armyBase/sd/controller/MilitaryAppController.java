@@ -36,38 +36,50 @@ public class MilitaryAppController {
 	}
 	
 	@RequestMapping("/base")
-	public String base(ModelMap modelMap) {
+	public String getBase(ModelMap modelMap) {
 		modelMap.put("menuList", nav.addPage(PageName.BASE).build());
 		return "militaryBase.html";
 	}
 	
 	@RequestMapping("/base/{id}")
-	public String baseDetails(ModelMap modelMap) {
+	public String getBaseDetails(ModelMap modelMap, @PathVariable Long id) {
 		modelMap.put("menuList", nav.addPage(PageName.BASE).build());
 		return "militaryBaseDetails.html";
 	}
 	
 	@RequestMapping("/soldier")
-	public String soldier(ModelMap modelMap) {
+	public String getSoldier(ModelMap modelMap) {
 		modelMap.put("menuList", nav.addPage(PageName.SOLDIER).build());
 		return "soldier.html";
 	}
 	
 	@RequestMapping("/soldier/{id}")
-	public String soldier(ModelMap modelMap, @PathVariable Long id) {
+	public String getSoldierDetails(ModelMap modelMap, @PathVariable Long id) {
 		modelMap.put("menuList", nav.addPage(PageName.SOLDIER).build());
 		return "soldierDetails.html";
 	}
 	
 	@RequestMapping("/operation")
-	public String operations(ModelMap modelMap) {
+	public String getOperation(ModelMap modelMap) {
 		modelMap.put("menuList", nav.addPage(PageName.OPERATION).build());
-		return "operations.html";
+		return "operation.html";
+	}
+	
+	@RequestMapping("/operation/{id}")
+	public String getOperationDetails(ModelMap modelMap, @PathVariable Long id) {
+		modelMap.put("menuList", nav.addPage(PageName.OPERATION).build());
+		return "operationDetails.html";
 	}
 	
 	@RequestMapping("/training")
-	public String training(ModelMap modelMap) {
+	public String geTraining(ModelMap modelMap) {
 		modelMap.put("menuList", nav.addPage(PageName.TRAINING).build());
 		return "training.html";
+	}
+	
+	@RequestMapping("/training/{id}")
+	public String getTrainingDetails(ModelMap modelMap, @PathVariable Long id) {
+		modelMap.put("menuList", nav.addPage(PageName.TRAINING).build());
+		return "trainingDetails.html";
 	}
 }

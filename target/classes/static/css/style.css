@@ -110,3 +110,14 @@ a {
     text-align : center;
     padding : 5px;
 }
+
+.boxStyle{
+	margin-top: 4px; 
+	outline: 1px solid #CCC; 
+	border: 2px solid #CCC;
+}
+
+.content {
+    max-width: 980px;
+    margin: auto;
+}

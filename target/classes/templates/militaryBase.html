@@ -42,9 +42,15 @@
 			</table>
 		</div>
 		<br><br>
-		<div class="w3-content" data-bind = "visible: openEditable()">
+
+	<div class="content"
+				data-bind="template: {if: openEditable(), name: 'add', data: baseToBeAdded }">
+	</div>
+
+
+<script type="text/html" id="add">
 		<header th:text = "#{armyBase.base.add}" class = "officialColor w3-centered w3-padding" ></header>
-			<form class="w3-card" data-bind="with: baseToBeAdded">
+			<form class="w3-card">
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
 						<label  th:text="#{armyBase.baseName}"></label>
@@ -68,15 +74,15 @@
 						<label  th:text="#{armyBase.baseLongitude}"></label>
 					</div>
 					<div class="w3-twothird" data-bind="with: $root.dmsLon">
-						<input data-bind="value : days"></input>
+						<input class = "boxStyle" data-bind="value : days"></input>
 						<p style="display: inline"
 								th:text = "#{armyBase.days}" ></p><br>
-						<input data-bind="value : minutes" ></input>
+						<input class = "boxStyle" data-bind="value : minutes" ></input>
 						<p style="display: inline"
 								th:text = "#{armyBase.minutes}" ></p><br>
-						<input data-bind="value : seconds"></input>
+						<input class = "boxStyle" data-bind="value : seconds"></input>
 						<p style="display: inline"
-								th:text = "#{armyBase.seconds}" ></p><br>
+								th:text = "#{armyBase.seconds}" ></p>
 						<select data-bind =  "options : $root.longitudeOptions, value : direction"></select>
 
 					</div>
@@ -88,15 +94,16 @@
 
 					</div>
 					<div class="w3-twothird " data-bind="with: $root.dmsLat">
-						<input data-bind="value : days"></input>
+						<input class = "boxStyle" data-bind="value : days"></input>
 						<p style="display: inline"
 								th:text = "#{armyBase.days}" ></p><br>
-						<input data-bind="value : minutes" ></input>
+						<input class = "boxStyle"
+						data-bind="value : minutes" ></input>
 						<p style="display: inline"
 								th:text = "#{armyBase.minutes}" ></p><br>
-						<input data-bind="value : seconds"></input>
+						<input class = "boxStyle" data-bind="value : seconds"></input>
 						<p style="display: inline"
-								th:text = "#{armyBase.seconds}" ></p><br>
+								th:text = "#{armyBase.seconds}" ></p>
 						<select data-bind =  "options : $root.latitudeOptions, value : direction"></select>
 					</div>
 				</div>
@@ -113,8 +120,8 @@
 					</div>
 				</div>
 			</form>
+</script>		
 
-		</div>
 	</div>
 	
 
@@ -124,8 +131,7 @@
 	 $(function() {
                         var militaryBaseVM = new MilitaryBaseVM({
                             contextPath : '[[@{/}]]',
-                            urlBase : '[[@{/base}]]',
-
+                            urlBase : '[[@{/base}]]'
                         });
                 
 				ko.	applyBindings(militaryBaseVM,document.getElementById("baseContext"));

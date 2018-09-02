@@ -2,18 +2,24 @@ function TrainingVM(initData) {
     var self = this;
     
     self.urlBase = initData.urlBase;
+    self.id = initData.idTraining;
     
-    self.trainingArray = ko.observableArray();
+    self.training = ko.observable();
+    
     self.trainingToBeAdded = ko.observable();
     
     self.soldierArray = ko.observableArray();
-    self.soldierArrayForBase = ko.observableArray();
     self.baseSoldierToBeAdded = ko.observable();
     self.soldierToBeAdded = ko.observable();
     self.baseArray = ko.observableArray();
     self.baseToBeAdded = ko.observable();
     self.soldierToAdd = ko.observable();
     self.tagNumber;
+    
+    self.isEditable = ko.observable();
+    self.ready = ko.observable(false);
+    
+    
     
     self.soldierByTag = ko.observable();
    
@@ -30,45 +36,102 @@ function TrainingVM(initData) {
     self.openEditable = ko.observable(false);
     
 
+	self.getMode = ko.computed(function() {
+		if(self.isEditable()) {
+			return "edit";
+		}
+		return "view";
+	});
+
+    self.delete = function () {
+    swal({
+		  title: 'Are you sure?',
+		  text: "You won't be able to revert this!",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+		  if (result.value) {
+				$.ajax({
+					type: "DELETE",
+					url: this.urlBase + "/deleteById/" + self.id,
+					success: function (data) {
+					   console.log(data);
+						swal({
+							title: "The entity has been deleted successfully!",
+							onClose: () => {
+							 window.location.assign("/training"); }
+							});
+					},
+					error: function(errors) {   
+							swal({
+						title: errors.responseJSON.message,
+						type: "error"
+						});         
+					}
+				});
+			}			 
+		});
+	}
+	
+	
+	self.goBack = function () {
+        window.location.assign("/training");
+    }
+
+     self.makeEditable = function () { 
+       self.setDateTimes(); 
+       self.isEditable(true);  
+       self.getMilitaryBases(); 
+       self.getSoldiers();
+      
+    }
+
+    self.discard = function () {
+        self.isEditable(false);    
+    }
+	
     self.loadData = function () {
         $.ajax({
             type: "GET",
-            url: self.urlBase + "/getAll",
+            url: self.urlBase + "/getById/" + self.id,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                self.trainingArray.removeAll();
-                data.forEach(function(entry) {
-                    self.trainingArray.push(new TrainingViewModel(entry));               
-                 });
-                 console.log(self.trainingArray());
-            }
+                self.training(new TrainingViewModel(data));       
+            },
+             error: function(errors) {
+                console.log(errors.responseJSON);
+                        swal({
+                    title: errors.responseJSON.message,
+                    type: "error"
+                    });         
+            } 
         });
     }
- 
-    self.getDetails = function (training) {
-        window.location.assign(self.urlBase + "/" + training.id);
-    }
-
-     self.openEditableTraining = function () {
-        self.getMilitaryBases();
-        self.getSoldiers();
-        self.trainingToBeAdded(new TrainingViewModel({
-        	instructor : {fullName:"", rank:{rankName:""}},
-        	trainingBase : { name:""},
-            description : "", 
-            startTime : "",
-            endTime : ""})
-            );  
-       self.setDateTimes();
-       self.openEditable(true);
-       console.log(self.trainingToBeAdded());
-    }
-    
+     
      self.getSoldiers = function () {
         $.ajax({
             type: "GET",
             url: "/rest/soldier/getAll",
+            dataType: "json",
+            success: function (data) {
+                self.soldierArray.removeAll();
+                data.forEach(function(entry) {
+                if(entry.fullName.trim()!="")
+                    self.soldierArray.push(new SoldierViewModel(entry));               
+                 });
+                 console.log(self.soldierArray());
+            }
+        });
+    }
+    
+    self.getOperationSoldiers = function () {
+        $.ajax({
+            type: "GET",
+            url: self.urlBase + "/getSoldiers/" + self.id,
             dataType: "json",
             success: function (data) {
                 self.soldierArray.removeAll();
@@ -144,52 +207,35 @@ function TrainingVM(initData) {
 					});
 
 	 }
-	 
-	 self.checkDates = function() {
-			if(moment(self.trainingToBeAdded().endTime()).isBefore(moment(self.trainingToBeAdded().startTime()))) {
-				swal({
-	                    title: "The start time must be before the end time",
-	                    type: "error"
-	                    });
-	           return false;   
-			}
-			return true;
-	}
 
-    self.addTraining = function () {
-    console.log(self.soldierToBeAdded());
-    if(self.checkDates()) {
+    self.updateTraining = function () {
         var training = {
-            description : self.trainingToBeAdded().description,
+            description : self.training().description,
             instructor : {
-            	idSoldier:self.soldierToAdd().id,
-            	fullName : self.soldierToAdd().name,
-            	rank :self.soldierToAdd().rank
+            	idSoldier:self.soldierToAdd().id
             	},
             trainingBase : {
-            	idMilitaryBase : self.baseToBeAdded().id,
-            	name : self.baseToBeAdded().name
+            	idMilitaryBase : self.baseToBeAdded().id
             	},
-            startTime : new Date(self.trainingToBeAdded().startTime()).toUTCString(),
-            endTime : new Date(self.trainingToBeAdded().endTime()).toUTCString()        
+            startTime : new Date(self.training().startTime()).toUTCString(),
+            endTime : new Date(self.training().endTime()).toUTCString()        
         }
         console.log(training);
         $.ajax({
             type: "POST",
-            url: self.urlBase + "/add",
+            url: self.urlBase + "/update",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data : JSON.stringify(training),
             success: function (data) {
-                self.trainingArray.push(new TrainingViewModel(data));
                 swal({
-                    title: "The entity was added successfully!",
+                    title: "The entity was updated successfully!",
                     type: 'success',
                     onClose: () => {
-				     window.location.assign(self.urlBase); 
+				    location.reload(); 
 				  }
                     });
-                self.openEditable(false);
+                self.isEditable(false);
             },
             error: function(errors) {
                 console.log(errors.responseJSON);
@@ -199,7 +245,7 @@ function TrainingVM(initData) {
                     });         
             }
         });
-        }
+        
     }
 
     self.discard = function () {

@@ -4,7 +4,6 @@ package armyBase.sd.controller.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import armyBase.sd.dto.SoldierDTO;
 import armyBase.sd.dto.UserDTO;
+import armyBase.sd.exceptions.EntityNotFoundException;
 import armyBase.sd.exceptions.InvalidDataException;
 import armyBase.sd.model.Operation;
 import armyBase.sd.model.Role;
@@ -67,15 +67,12 @@ public class SoldierController {
 		}
 	    
 	    @GetMapping("getByTagNumber/{tag}")
-		public ResponseEntity<Soldier> getByTagNumber(@PathVariable String tag) {
-			System.out.println( "\n\n\n\ntaggggggg");
-
-		        try {
-		            return ResponseEntity.ok(soldierService.getByTagNumber(tag));
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return ResponseEntity.ok(null);
-		        }
+		public Soldier getByTagNumber(@PathVariable String tag) throws EntityNotFoundException {
+	    	Soldier soldier = soldierService.getByTagNumber(tag);
+	    	if(soldier == null)
+	    		throw new EntityNotFoundException("The entity does not exist");
+	    	return soldier;
+		 
 		}
 	    
 	 

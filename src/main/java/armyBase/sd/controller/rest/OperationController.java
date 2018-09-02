@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import armyBase.sd.dto.OperationDTO;
@@ -33,64 +32,35 @@ public class OperationController {
 
 	    @GetMapping("getAll")
 		public List<Operation> getAll() {
-		        try {
-		            return opService.getAll();
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		     return opService.getAll();
 		}
-	    
-	
-	   
-		@PutMapping("add")
+
+		@PostMapping("add")
 		public Operation add(@RequestBody OperationDTO op)
 		{
-			 try {
-				 return opService.create(op);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
-			
+			return opService.create(op);
+
 		}
 		
-
-		@PostMapping("update")
+		@PutMapping("update")
 		public Operation update(@RequestBody OperationDTO op) {
-		        try {
-		            return opService.update(op);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		       return opService.update(op);
 		    }
 
-		@GetMapping("getById")
-		public Operation getById(@RequestParam Long id) {
-		        try {
-		            return opService.getById(id);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		@GetMapping("getById/{id}")
+		public Operation getById(@PathVariable Long id) {
+		       return opService.getById(id);
 		    }
 		
 		@GetMapping("getSoldiers/{id}")
 		public List<Soldier> getSoldiers(@PathVariable Long id) {
 		      return soldOpService.getAllSoldiersByOperation(id);
 		    }
-		
-		
 
-		@DeleteMapping("deleteById")
-		public String deleteById(@RequestParam Long id) {
-		        try {
-		           opService.deleteById(id);
+		@DeleteMapping("deleteById/{id}")
+		public String deleteById(@PathVariable Long id) {
+		       opService.deleteById(id);
 		            return "Deleted!";
-		        } catch (Exception e) {
-		            return e.getMessage();
-		        }
 		    }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import armyBase.sd.exceptions.EntityNotFoundException;
 import armyBase.sd.exceptions.InvalidDataException;
 
 @ControllerAdvice
@@ -21,5 +22,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
         request.getDescription(false));
     return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+  }
+  
+  @ExceptionHandler(EntityNotFoundException.class)
+  public final ResponseEntity<ErrorDetails> handleEntitytNotFound(EntityNotFoundException ex, WebRequest request) {
+    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
+        request.getDescription(false));
+    return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
   }
 }

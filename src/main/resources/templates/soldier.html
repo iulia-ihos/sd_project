@@ -18,7 +18,7 @@
 			</th:block>
 		</div>
 			<th:block th:replace="fragments/frag :: date">
-			</th:block>
+		</th:block>
 	
 		<br> <br>
 		<div class="w3-content">
@@ -53,9 +53,15 @@
 			</table>
 		</div>
 		<br><br>
-		<div  style = "padding-top:0px" class="w3-content" data-bind = "visible: openEditable()">
+		
+		
+			<div class="content" style = "margin-top:50px"
+				data-bind="template: { if : openEditable(), name: 'add', data: soldierToBeAdded }">
+			</div>
+
+<script type="text/html" id="add">
 		<header th:text = "#{armyBase.soldier.add}" class = "officialColor w3-centered w3-padding" ></header>
-			<form class="w3-card" data-bind="with: soldierToBeAdded">
+			<form class="w3-card">
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
 						<label  th:text="#{armyBase.soldierFullname}"></label>
@@ -121,8 +127,9 @@
 					</div>
 				</div>
 			</form>
-
-		</div>
+</script>
+		
+		
 	</div>
 	<div th:replace="fragments/frag :: footer"></div>
  

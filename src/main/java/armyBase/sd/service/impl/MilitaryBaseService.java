@@ -66,7 +66,7 @@ public class MilitaryBaseService implements IMilitaryBaseService{
 		if(base.getLatitude()!=null)
 			b.setLatitude(base.getLatitude());
 		if(base.getLongitude()!=null)
-			b.setLongitude(b.getLongitude());
+			b.setLongitude(base.getLongitude());
 		if(base.getSoldiers()!=null)
 			b.setSoldiers(base.getSoldiers());
 		if(base.getTraining()!=null)

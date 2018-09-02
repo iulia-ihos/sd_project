@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import armyBase.sd.dto.MilitaryBaseDTO;
@@ -60,35 +60,21 @@ public class MilitaryBaseController {
 		}
 		
 
-		@PostMapping("update")
+		@PutMapping("update")
 		public MilitaryBase update(@RequestBody MilitaryBaseDTO base) {
-		        try {
-		            return baseService.update(base);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		        return baseService.update(base);
 		    }
 
-		@GetMapping("getById")
-		public MilitaryBase getById(@RequestParam Long id) {
-		        try {
-		            return baseService.getById(id);
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		@GetMapping("getById/{id}")
+		public MilitaryBase getById(@PathVariable Long id) {
+		        return baseService.getById(id);
 		    }
 		
 	
-		@DeleteMapping("deleteById/{id} ")
+		@DeleteMapping("deleteById/{id}")
 		public String deleteById(@PathVariable Long id) {
-		        try {
-		           baseService.deleteById(id);
-		            return "Deleted!";
-		        } catch (Exception e) {
-		            return e.getMessage();
-		        }
+			baseService.deleteById(id);
+		    return "Deleted!";
 		    }
 
 }
