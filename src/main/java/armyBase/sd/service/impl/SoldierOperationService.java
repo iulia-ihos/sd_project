@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Component;
 
 import armyBase.sd.dao.SoldierOperationDAO;
-import armyBase.sd.dto.SoldierDTO;
 import armyBase.sd.dto.SoldierOperationDTO;
 import armyBase.sd.model.Operation;
 import armyBase.sd.model.Soldier;
@@ -81,5 +79,14 @@ public class SoldierOperationService implements ISoldierOperationService{
 		return ops;
 	}
 
+	@Override
+	public void delete(SoldierOperationDTO so) {
+//		SoldierOperation soldierOperation = new SoldierOperation();
+//		soldierOperation.setSoldierToOperation(so.getSoldierToOperation());
+//		soldierOperation.setOperationToSoldier(so.getOperationToSoldier());
+		this.soldierOpDAO.delete(so.getOperationToSoldier().getIdOperation(),
+				so.getSoldierToOperation().getIdSoldier());
+	}
 
+	
 }

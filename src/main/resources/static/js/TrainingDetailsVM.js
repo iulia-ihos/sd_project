@@ -5,6 +5,8 @@ function TrainingDetailsVM(initData) {
     self.id = initData.idTraining;
     
     self.training = ko.observable();
+    
+    self.instructor;
    
     self.soldierArray = ko.observableArray();
     self.soldierToBeAdded = ko.observable();
@@ -103,6 +105,7 @@ function TrainingDetailsVM(initData) {
                 self.training(new TrainingViewModel(data));  
                 console.log(data);  
                 self.ready(true);   
+                self.instructor = data.instructor;
             },
              error: function(errors) {
                 console.log(errors.responseJSON);
@@ -204,13 +207,16 @@ function TrainingDetailsVM(initData) {
 		return true;
 	}
 
+	 self.setInstructor = function() { 
+    	self.instructor = self.soldierToAdd();
+    }
     self.updateTraining = function () {
         if(self.checkDates()) {
         var training = {
         	idTraining : self.id,
             description : self.training().description,
             instructor : {
-            	idSoldier:self.soldierToAdd().id
+            	idSoldier : (self.instructor.idSoldier == undefined)? self.instructor.id : self.instructor.idSoldier
             	},
             trainingBase : {
             	idMilitaryBase : self.baseToBeAdded().id
@@ -266,8 +272,7 @@ function TrainingViewModel(data) {
 
     self.start = ko.observable(moment(data.startTime).format().split(/[+]+/)[0]);
     self.end = ko.observable(moment(data.endTime).format().split(/[+]+/)[0]);
-    
-    console.log("start " + self.start() );
+
 }
 
 function MilitaryBaseViewModel(data) {

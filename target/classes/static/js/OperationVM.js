@@ -114,12 +114,35 @@ function OperationVM(initData) {
 					});
 
 	 }
+	 
+    self.addByUser = function() {
+    	self.operationToBeAdded().status = "PENDING";
+    	self.addOperation();
+    }
+    
+    self.addByCommander = function() {
+    	self.operationToBeAdded().status = "ACCEPTED";
+    	self.addOperation();
+    }
+
+	 self.checkDates = function() {
+			if(moment(self.operationToBeAdded().endDate()).isBefore(moment(self.operationToBeAdded().startDate()))) {
+				swal({
+	                    title: "The start time must be before the end time",
+	                    type: "error"
+	                    });
+	           return false;   
+			}
+			return true;
+	}
 
     self.addOperation = function () {
+       if(self.chechDates()){
         var operation = {
             description : self.operationToBeAdded().description,
             commander : {
-            	idSoldier:self.soldierToAdd().id
+            	idSoldier : self.soldierToAdd().id,
+            	rank : self.soldierToAdd().rank 
             	},
             startDate : new Date(self.operationToBeAdded().startDate()).toUTCString(),
             endDate : new Date(self.operationToBeAdded().endDate()).toUTCString(),
@@ -131,8 +154,9 @@ function OperationVM(initData) {
             url: self.urlBase + "/add",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data : JSON.stringify(training),
+            data : JSON.stringify(operation),
             success: function (data) {
+                console.log(data);
                 self.operationArray.push(new OperationViewModel(data));
                 swal({
                     title: "The entity was added successfully!",
@@ -151,7 +175,7 @@ function OperationVM(initData) {
                     });         
             }
         });
-        
+        }
     }
 
     self.discard = function () {
@@ -160,25 +184,12 @@ function OperationVM(initData) {
 
 }
 
-function TrainingViewModel(data) {
-    var self = this;
-	
-	self.id = data.idTraining;
-    self.description = data.description;
-    self.instructor = data.instructor.fullName + ", " + data.instructor.rank.rankName;
-    self.endTime = ko.observable((data.endTime == null)? "unknown" : 
-    	moment(data.endTime).format('lll'));
-    self.startTime = ko.observable((data.startTime == null)? "unknown" : 
-    	moment(data.startTime).format('lll'));
-    self.base = data.trainingBase.name;
-}
-
 function OperationViewModel(data) {
     var self = this;
 	
 	self.id = data.idOperation;
     self.description = data.description;
-    self.commander = data.commander.fullName + ", " + data.commander.rank.rankName;
+    self.commander = data.commander.fullName;
     self.endDate = ko.observable((data.endDate == null)? "unknown" : 
     	moment(data.endDate).format('lll'));
     self.startDate = ko.observable((data.startDate == null)? "unknown" : 

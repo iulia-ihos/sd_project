@@ -100,18 +100,10 @@
 						type = "datetime-local" data-bind="value : endDate"></input>
 					</div>
 				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label  th:text="#{armyBase.operationStatus}"></label>
-					</div>
-					<div class="w3-twothird">
-						<input  data-bind="value : status"></input>
-					</div>
-				</div>
 				
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-half w3-padding">
-						<button data-bind="click: $root.addOperation"
+						<button data-bind="click: $root.addByUser"
 							class="w3-blue w3-padding" th:text="#{armyBase.common.add}"></button>
 						<button data-bind="click: $root.discard" class="w3-red w3-padding"
 							th:text="#{armyBase.common.discard}"></button>

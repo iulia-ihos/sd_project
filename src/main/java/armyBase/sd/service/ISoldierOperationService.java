@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import armyBase.sd.dto.SoldierDTO;
 import armyBase.sd.dto.SoldierOperationDTO;
 import armyBase.sd.model.Operation;
 import armyBase.sd.model.Soldier;
@@ -20,5 +19,6 @@ public interface ISoldierOperationService{
 	public SoldierOperation update(SoldierOperationDTO soldierOp);
     public void deleteById(Long id);
     public List<Soldier> getAllSoldiersByOperation(Long opId);
-    public List<Operation> getAllOperationsBySoldier(Long soldierId);   
+    public List<Operation> getAllOperationsBySoldier(Long soldierId);  
+	public void delete(SoldierOperationDTO soldierOperation);
 }

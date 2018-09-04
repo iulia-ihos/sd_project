@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<div id="trainingContext">
+	<div id="operationContext">
 		<div>
 			<th:block th:replace="fragments/frag :: menu">
 			</th:block>
@@ -20,7 +20,7 @@
 		<div class="w3-content">
 			<header class="officialColor">
 				<h3>
-					Training Details <i style="cursor: pointer; font-size: 30px"
+					Operation Details <i style="cursor: pointer; font-size: 30px"
 						class=" fa fa-arrow-left" aria-hidden="true"
 						th:title="#{armyBase.common.back}" data-bind="click: $root.goBack"></i>
 					<i style="cursor: pointer; font-size: 30px" class=" fa fa-trash"
@@ -34,7 +34,7 @@
 			</header>
 
 			<div
-				data-bind="template: { if : ready(), name: 'form-' + getMode(), data: training }">
+				data-bind="template: { if : ready(), name: 'form-' + getMode(), data: operation }">
 			</div>
 
 
@@ -42,70 +42,90 @@
    <form class="w3-card-4">
 				<div  class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingDescription}"></label>
+						<label th:text="#{armyBase.operationDescription}"></label>
 					</div>
 					<div class="w3-twothird">
 						<input data-bind="value : description"></input>
 					</div>
 				</div>
 				<hr>
+<!--commander-->
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingInstructor}"></label>
+						<label th:text="#{armyBase.operationCommander}"></label>
 					</div>
 					<div class="w3-twothird">
-						<select data-bind =  "options : $root.soldierArray, value : $root.soldierToBeAdded ,optionsText : 'name'"></select>
+						<select data-bind =  "options : $root.soldierArray, value : $root.commanderToBeAdded ,optionsText : 'name'"></select>
 					    <span style="display:inline">or</span>
-					    <button data-bind="click: $root.getSoldierByTagNumber" class="w3-black w3-small"
+					    <button data-bind="click: $root.setCommanderByTag" class="w3-black w3-small"
 							th:text="#{armyBase.common.getSoldier}"
 							th:title = "#{armyBase.common.getSoldierHover}"
 							style = "cursor:pointer"></button>
-						<input class = "boxStyle" data-bind  = "value : $root.tagNumber"></input>
+						<input class = "boxStyle" placeholder = "Soldier Tag Number" data-bind  = "value : $root.tagNumber"></input>
 						<br><br>
-						<span>Selected instructor: </span>
-						<span style = "display:inline" id = "selectedSoldier"></span>
+						<span>Selected commander: </span>
+						<span style = "display:inline" id = "selectedCommander"></span><br>
+						<button data-bind="click: $root.setCommander" class="w3-black w3-small"
+							th:text="#{armyBase.operation.chooseCommander}"
+							style = "cursor:pointer"></button>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingBase}"></label>
+						<label th:text="#{armyBase.operationMembers}"></label>
 					</div>
 					<div class="w3-twothird">
-						<input data-bind="value : alias"></input>
+						<select data-bind =  "options : $root.soldierArray, value : $root.memberToBeAdded ,optionsText : 'name'"></select>
+					    <span style="display:inline">or</span>
+					    <button data-bind="click: $root.setMemberTag" class="w3-black w3-small"
+							th:text="#{armyBase.common.getSoldier}"
+							th:title = "#{armyBase.common.getSoldierHover}"
+							style = "cursor:pointer"></button>
+						<input class = "boxStyle" placeholder = "Soldier Tag Number" data-bind  = "value : $root.tagNumber"></input>
+						<br><br>
+
+						<span>You have choosen: </span>
+						<span style = "display:inline" id = "selectedMember"></span><br>
+						<button data-bind="click: $root.addMember" class="w3-black w3-small"
+							th:text="#{armyBase.operation.addMember}"
+							style = "cursor:pointer"></button>
+						<br><br>
+						<span>Selected members: </span><br>
+						<span style = "display:inline" data-bind="foreach: $root.soldierMembers">
+							<span >
+								<span data-bind= "text: name"></span>
+								<span data-bind= "text: rankName"></span>
+								<i style="cursor: pointer; font-size: 15px"
+						         class=" fa fa-close" aria-hidden="true"
+						         th:title="#{armyBase.operation.removeMember}" 
+								data-bind="click: $root.removeMember"></i><br>
+           					</span>
+						</span>
 					</div>
 				</div>
 
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.soldierMilitaryBase}"> </label>
+						<label  th:text="#{armyBase.operationStartDate}"></label>
 					</div>
-					<div class="w3-twothird ">
-						<select data-bind =  "options : $root.baseArray, 
-						value : $root.baseToBeAdded ,optionsText : 'name'"></select>
+					<div class="w3-twothird">
+						<input id = "dateTime"
+						type = "datetime-local" data-bind="value : startDate"></input>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label  th:text="#{armyBase.trainingStartTime}"></label>
+						<label  th:text="#{armyBase.operationEndDate}"></label>
 					</div>
 					<div class="w3-twothird">
 						<input id = "dateTime"
-						type = "datetime-local" data-bind="value : startTime"></input>
-					</div>
-				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label  th:text="#{armyBase.trainingEndTime}"></label>
-					</div>
-					<div class="w3-twothird">
-						<input id = "dateTime"
-						type = "datetime-local" data-bind="value : endTime"></input>
+						type = "datetime-local" data-bind="value : endDate"></input>
 					</div>
 				</div>
 
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-half w3-padding">
-						<button data-bind="click: $root.updateTraining"
+						<button data-bind="click: $root.updateOperation"
 							class="w3-blue w3-padding" th:text="#{armyBase.common.update}"></button>
 						<button data-bind="click: $root.discard" class="w3-red w3-padding"
 							th:text="#{armyBase.common.discard}"></button>
@@ -118,66 +138,57 @@
    <form class="w3-card-4">
 			   <div  class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingDescription}"></label>
+						<label th:text="#{armyBase.operationDescription}"></label>
 					</div>
 					<div class="w3-twothird">
-						<span data-bind="text : decsription"></span>
+						<span data-bind="text : description"></span>
 					</div>
 				</div>
 				<hr>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingInstructor}"></label>
+						<label th:text="#{armyBase.operationCommander}"></label>
 					</div>
 					<div class="w3-twothird">
-						<span data-bind="text : instructor"></span>
+						<span data-bind="text : commander"></span>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingBase}"></label>
+						<label th:text="#{armyBase.operationStartDate}"> </label>
 					</div>
-					<div class="w3-twothird">
-						<span data-bind="text : base"></span>
+					<div class="w3-twothird ">
+						<span data-bind="text : startDate"></span>
+					</div>
+				</div>
+				<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.operationEndDate}"></label>
+					</div>
+					<div class="w3-twothird  ">
+						<span data-bind="text : endDate"></span>
 					</div>
 				</div>
 
 				<div class="w3-row w3-container w3-padding">
 					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingStartTime}"> </label>
-					</div>
-					<div class="w3-twothird ">
-						<span data-bind="text : startTime"></span>
-					</div>
-				</div>
-				<div class="w3-row w3-container w3-padding">
-					<div class="w3-third ">
-						<label th:text="#{armyBase.trainingEndTime}"></label>
-					</div>
-					<div class="w3-twothird  ">
-						<span data-bind="text : endTime"></span>
-					</div>
-				</div>
-				<div class="w3-row w3-container w3-padding"
-					data-bind="visible: $root.soldierArray().length > 0">
-					<div class="w3-third ">
 						<label th:text="#{armyBase.operationSoldiers}"></label>
 					</div>
-					<div class="w3-twothird">
-						<div data-bind="foreach: $root.soldierArray"
+					<div class="w3-twothird" data-bind = "visible: $root.soldierMembers().length>0">
+						<div data-bind=" foreach: $root.soldierMembers"
 							style="margin-right: 270px; margin-top: 2px; outline: 2px solid #CCC; border: 1px solid black">
 								<label style="font-weight: bold"
-									th:text="#{armyBase.soldierName}"></label>
+									th:text="#{armyBase.soldierFullname}"></label>
 								<p class="w3-padding" style="display: inline"
 									data-bind="text : name"></p>
 								<br> <label style="font-weight: bold"
 									th:text="#{armyBase.soldierRank}"></label>
 								<p class="w3-padding" style="display: inline"
-									data-bind="text : rank"></p>
+									data-bind="text : rankName"></p>
 								<br> <label style="font-weight: bold"
 									th:text="#{armyBase.soldierTagNumber}"></label>
 								<p class="w3-padding" style="display: inline"
-									data-bind="text : tagNumber"></p>
+									data-bind="text : tagNumber"></p><hr>
 						</div>
 					</div>
 				</div>
@@ -189,17 +200,17 @@
 	</div>
 	<div th:replace="fragments/frag :: footer"></div>
 	
-	<script th:src="@{/js/TrainingDetailsVM.js}" type="text/javascript"></script>
+	<script th:src="@{/js/OperationDetailsVM.js}" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(function () {
-			var trainingDetailsVM = new TrainingDetailsVM({
+			var operationDetailsVM = new OperationDetailsVM({
 				contextPath: '[[@{/}]]',
-				urlBase: '[[@{/training}]]',
-				idTraining: [[${id}]]
+				urlBase: '[[@{/operation}]]',
+				idOperation: [[${id}]]
 
 			});
-			ko.applyBindings(trainingDetailsVM, document.getElementById("trainingContext"));
-			trainingDetailsVM.loadData();
+			ko.applyBindings(operationDetailsVM, document.getElementById("operationContext"));
+			operationDetailsVM.loadData();
 		});
 	</script>
 

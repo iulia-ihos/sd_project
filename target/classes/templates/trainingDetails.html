@@ -60,10 +60,13 @@
 							th:text="#{armyBase.common.getSoldier}"
 							th:title = "#{armyBase.common.getSoldierHover}"
 							style = "cursor:pointer"></button>
-						<input class = "boxStyle" data-bind  = "value : $root.tagNumber"></input>
+						<input class = "boxStyle"  placeholder = "Soldier Tag Number" data-bind  = "value : $root.tagNumber"></input>
 						<br><br>
 						<span>Selected instructor: </span>
-						<span style = "display:inline" id = "selectedSoldier"></span>
+						<span style = "display:inline" id = "selectedSoldier"></span><br>
+                        <button data-bind="click: $root.setInstructor" class="w3-black w3-small"
+							th:text="#{armyBase.training.chooseInstructor}"
+							style = "cursor:pointer"></button>
 					</div>
 				</div>
 				<div class="w3-row w3-container w3-padding">
@@ -148,7 +151,6 @@
 					<div class="w3-twothird  ">
 						<span data-bind="text : endTime"></span>
 					</div>
-				</div>
 </form>
 </script>
 
