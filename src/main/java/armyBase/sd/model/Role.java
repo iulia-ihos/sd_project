@@ -30,9 +30,8 @@ public class Role {
 	@Column(name="roleName")
 	private String roleName;
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy= "rol",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<UserDetailed> usersToRole;
 	
 	public Role() {

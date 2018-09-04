@@ -45,11 +45,10 @@ background-color:#111;
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
-    width: 100%;
+    width: 70%;
     padding: 15px;
     margin: 5px 0 22px 0;
-    display: inline-block;
-    border: none;
+    border: 1px solid black;
     background: #f1f1f1;
 }
 
@@ -72,7 +71,7 @@ hr {
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
+    width: 45%;
     opacity: 0.9;
 }
 
@@ -120,4 +119,9 @@ a {
 .content {
     max-width: 980px;
     margin: auto;
+}
+
+#registerContent {
+    padding-left:30px;
+    padding-right:30px
 }

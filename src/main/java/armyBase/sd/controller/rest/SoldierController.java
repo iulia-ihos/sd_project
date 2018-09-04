@@ -4,6 +4,7 @@ package armyBase.sd.controller.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,16 +77,17 @@ public class SoldierController {
 		 
 		}
 	    
-	 
+	    @PreAuthorize("hasRole('ROLE_ADMIN')")
 		@PostMapping("add")
 		public Soldier add(@RequestBody SoldierDTO soldier) throws InvalidDataException
 		{
 			return soldierService.create(soldier);	
 		}
 		
-	    
-	    @PutMapping("updateRole")
-		public Soldier updateRole(@RequestParam Long idSoldier, Long idRole) {
+	    @PreAuthorize("hasRole('ROLE_ADMIN')")
+		@RequestMapping(value = "/updateRole/{idSoldier}/{idRole}", method=RequestMethod.PUT)
+		public Soldier updateRole(@PathVariable(value = "idSoldier") Long idSoldier, 
+								@PathVariable(value = "idRole") Long idRole) {
 		        try {
 		            Soldier s = soldierService.getById(idSoldier);
 		            
@@ -102,6 +105,7 @@ public class SoldierController {
 		        }
 		    }
 	    
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		@PutMapping("update")
 		public Soldier update(@RequestBody SoldierDTO soldier) {
 		       return soldierService.update(soldier);
@@ -128,7 +132,7 @@ public class SoldierController {
 		        }
 		    }
 		
-		
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		@DeleteMapping("deleteById/{id}")
 		public String deleteById(@PathVariable Long id) throws InvalidDataException {
 			

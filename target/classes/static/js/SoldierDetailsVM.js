@@ -56,11 +56,13 @@ function SoldierDetailsVM(initData) {
 		});
 	}
 
+	
     self.loadData = function () {
     	self.isEditable(false);
     	self.getOperations();
     	self.getOperationsInCharge();
     	self.getTrainingsInCharge();
+    	self.getRoles();
     	
         $.ajax({
             type: "GET",
@@ -69,10 +71,18 @@ function SoldierDetailsVM(initData) {
             dataType: "json",
             success: function (data) {
                console.log(data);
+               if(data.user!=null) {
+               		self.idUser = data.user.idUser;
+               }
                self.soldier(new SoldierDetailsViewModel(data,"view"));
                self.ready(true);
                self.rankToBeAdded(new RankViewModel(data.rank));
                self.baseToBeAdded(new MilitaryBaseViewModel(data.base));
+               if(self.soldier().user!=null) {
+                    self.role(self.soldier().user.rol.roleName);
+                    console.log(self.role());
+               		document.getElementById("role").innerHtml = self.role();
+               	}
             },
             fail: function () {
                 alert("failed getting the data");
@@ -255,6 +265,59 @@ function SoldierDetailsVM(initData) {
     self.discard = function () {
         self.isEditable(false);    
     }
+    
+    self.roleArray = ko.observableArray();
+    self.roleToBeAdded = ko.observable();
+    self.role  = ko.observable();
+    self.idUser;
+    
+    
+    self.getRoles = function() {
+    	$.ajax({
+            type: "GET",
+            url: "/role/getAll",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                self.roleArray.removeAll();
+                data.forEach(function(entry) { 
+                    self.roleArray.push(new RoleViewModel(entry));             
+                 });
+                 console.log(self.roleArray());
+                
+            },
+            fail: function () {
+                alert("failed getting the data");
+            }
+        });
+    
+    }
+    
+    self.updateRole = function() {
+    	$.ajax({
+            type: "PUT",
+            url: "/rest/soldier/updateRole/" + self.id + "/" + self.roleToBeAdded().id ,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                swal({
+                    title: "The update was succesfull!",
+                    type: "success",
+                    onClose: () => {
+				     location.reload(); 
+				  }
+                    });
+                self.isEditable(false);
+            },
+            error: function(errors) {
+                        swal({
+                    title: errors.responseJSON.message,
+                    });         
+            }
+        });
+    	
+    }
 
 }
 
@@ -302,4 +365,12 @@ function SoldierDetailsViewModel(data,mode) {
     self.alias = ko.observable(data.alias);
     self.base = ko.observable(data.base.name);
     self.dob = ko.observable((data.dob == null)? "unknown" : moment(data.dob).format('ll'));
+    self.user = data.user;
+}
+
+function RoleViewModel(data) {
+	var self = this;
+	
+	self.id = data.idRole;
+	self.name = data.roleName;
 }

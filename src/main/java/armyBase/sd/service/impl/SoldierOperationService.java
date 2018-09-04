@@ -81,9 +81,6 @@ public class SoldierOperationService implements ISoldierOperationService{
 
 	@Override
 	public void delete(SoldierOperationDTO so) {
-//		SoldierOperation soldierOperation = new SoldierOperation();
-//		soldierOperation.setSoldierToOperation(so.getSoldierToOperation());
-//		soldierOperation.setOperationToSoldier(so.getOperationToSoldier());
 		this.soldierOpDAO.delete(so.getOperationToSoldier().getIdOperation(),
 				so.getSoldierToOperation().getIdSoldier());
 	}

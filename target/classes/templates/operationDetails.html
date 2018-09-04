@@ -192,6 +192,21 @@
 						</div>
 					</div>
 				</div>
+					<div class="w3-row w3-container w3-padding">
+					<div class="w3-third ">
+						<label th:text="#{armyBase.operationStatus}"></label>
+					</div>
+					<div class="w3-twothird">
+						<span data-bind="text : status"></span>
+					</div>
+				</div>
+				<div th:if = "${isCommander}" class = "w3-padding">
+				<button data-bind="visible: status!='ACCEPTED',click: $root.acceptOperation" class="w3-black w3-small"
+							style = "cursor:pointer">Accept Mission</button>
+				<button data-bind="visible: status!='REJECTED',click: $root.rejectOperation" class="w3-black w3-small"
+							style = "cursor:pointer">Reject Operation</button>
+				</div>
+        
 </form>
 		
 </script>

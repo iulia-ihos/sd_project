@@ -137,7 +137,7 @@ function OperationVM(initData) {
 	}
 
     self.addOperation = function () {
-       if(self.chechDates()){
+       if(self.checkDates()){
         var operation = {
             description : self.operationToBeAdded().description,
             commander : {

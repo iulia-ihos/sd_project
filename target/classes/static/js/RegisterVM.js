@@ -10,6 +10,7 @@ function RegisterVM(initData) {
     self.soldier = ko.observable();
     self.soldierExists = ko.observable(false);
     self.emailExists = ko.observable(true);
+    self.idUser;
 
 
     function checkTagNumber() {
@@ -25,13 +26,17 @@ function RegisterVM(initData) {
                 }
                 else{
                        console.log("soldier exists");
-                self.soldier(JSON.stringify(new SoldierViewModel(result)));
+                self.soldier(new SoldierViewModel(result));
                  self.soldierExists(true);
                 }
-            },
-            fail: function () {
-                console.log("tag fail");
-            }
+            }, 
+             error: function(errors) {
+                        swal({
+                        	title:"Tag Number",
+		                    text: errors.responseJSON.message,
+		                    type: "error"
+                    });    
+             }  
         });
 
     }
@@ -91,13 +96,23 @@ function RegisterVM(initData) {
             console.log("user out " + self.emailExists());
 
             if (!self.soldierExists()) {
-                alert("no such tag name");
-                window.location.assign("/register");
+                swal({
+		                    title: "No Such Tag Name!",
+		                    type: 'success',
+		                    onClose: () => {
+						    window.location.assign("/register"); 
+						  }
+                   		 });
             }
             else
             if (self.emailExists()) {
-                alert("email already in use");
-                window.location.assign("/register");
+                 swal({
+		                    title: "Email already in use!",
+		                    type: 'success',
+		                    onClose: () => {
+						    window.location.assign("/register"); 
+						  }
+                   		 });
             }
             else {
 
@@ -119,11 +134,22 @@ function RegisterVM(initData) {
                     dataType: "json",
                     data: JSON.stringify(usr),
                     success: function (result) {
-                        console.log("post  " + result);
+                    	self.idUser = result.idUser;
+                    	self.updateSoldier();
+                        swal({
+		                    title: "The registration was successful!",
+		                    type: 'success',
+		                    onClose: () => {
+						    window.location.assign("/login"); 
+						  }
+                   		 });
                     },
-                    fail: function () {
-                        return false;
-                    },
+                    error: function(errors) {
+                        swal({
+		                    title: errors.responseJSON.message,
+		                    type: "error"
+                    });         
+            }
                 });
             }
             self.tagNumber("");
@@ -134,8 +160,36 @@ function RegisterVM(initData) {
 
     }
 
+    self.updateSoldier = function () {
+        var soldier = {
+        	idSoldier : self.soldier().id, 
+            user : {idUser: self.idUser}
+        }
+        console.log(soldier);
+        $.ajax({
+            type: "PUT",
+            url: "rest/soldier/update",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data : JSON.stringify(soldier),
+            success: function (data) {
+                swal({
+                    title: "The update was succesfull!",
+                    type: "success",
+                    onClose: () => {
+				     location.reload(); 
+				  }
+                    });
+            },
+            error: function(errors) {
+                        swal({
+                    title: errors.responseJSON.message,
+                    });         
+            }
+        });
+        
 
-
+}
 }
 
 function SoldierViewModel(data) {

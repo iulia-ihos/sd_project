@@ -369,6 +369,46 @@ function OperationDetailsVM(initData) {
     self.discard = function () {
         self.openEditable(false);    
     }
+    
+    self.acceptOperation = function() {
+    	self.updateStatus("ACCEPTED");
+    }
+    
+    self.rejectOperation = function() { 
+    	self.updateStatus("REJECTED");
+    }
+    
+    self.updateStatus = function(s) {
+    	 var operation = {
+        	idOperation : self.id,
+            status : s    
+        }
+        console.log(operation);
+        $.ajax({
+            type: "PUT",
+            url: self.urlBase + "/update",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data : JSON.stringify(operation),
+            success: function (data) {
+                swal({
+                    title: "Operation new status is " + s,
+                    type: 'success',
+                    onClose: () => {
+				    location.reload(); 
+				  }
+                    });
+                self.isEditable(false);
+            },
+            error: function(errors) {
+                console.log(errors.responseJSON);
+                        swal({
+                    title: errors.responseJSON.message,
+                    type: "error"
+                    });         
+            }
+        });
+    } 
 
 }
 

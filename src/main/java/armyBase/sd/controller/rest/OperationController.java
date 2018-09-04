@@ -3,6 +3,7 @@ package armyBase.sd.controller.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class OperationController {
 		public List<Operation> getAll() {
 		     return opService.getAll();
 		}
-
+        
 		@PostMapping("add")
 		public Operation add(@RequestBody OperationDTO op)
 		{
@@ -57,6 +58,7 @@ public class OperationController {
 		      return soldOpService.getAllSoldiersByOperation(id);
 		    }
 
+		@PreAuthorize("hasRole('ROLE_COMMANDER')")
 		@DeleteMapping("deleteById/{id}")
 		public String deleteById(@PathVariable Long id) {
 		       opService.deleteById(id);

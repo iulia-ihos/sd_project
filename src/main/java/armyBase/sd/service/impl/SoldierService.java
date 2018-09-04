@@ -71,6 +71,8 @@ public class SoldierService implements ISoldierService {
 		Soldier s = getById(soldier.getIdSoldier());
 		if(soldier.getAlias()!=null)
 			s.setAlias(soldier.getAlias());
+		if(soldier.getUser()!=null)
+			s.setUser(soldier.getUser());
 		if(soldier.getBase()!=null)
 			s.setBase(soldier.getBase());
 		if(soldier.getTagNumber()!=null)

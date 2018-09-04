@@ -17,6 +17,13 @@
             <a th:href="${element.url}" th:text="${element.title}"></a>
         </li>
     </ul>
+    <div style="margin-top : 50px; display: inline" class = "w3-right" th:text="${name}"></div>
+    <i class="fa fa-user w3-right" style="margin-top : 50px; font-size: 20px" > </i>
+    <br>
+     <div th:each="role :  ${roles}">
+        <div style="margin-top : 55px; margin-left:1100px" th:text="${role}" ></div>   
+    </div>
+    
     </div>
 
     <div th:fragment="date">

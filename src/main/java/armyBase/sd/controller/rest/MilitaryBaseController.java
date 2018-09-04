@@ -4,6 +4,7 @@ package armyBase.sd.controller.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,12 +36,7 @@ public class MilitaryBaseController {
 
 	    @GetMapping("getAll")
 		public List<MilitaryBase> getAll() {
-		        try {
-		            return baseService.getAll();
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		            return null;
-		        }
+		    return baseService.getAll();
 		}
 	    
 	    @GetMapping("getSoldiers/{id}")
@@ -53,13 +49,14 @@ public class MilitaryBaseController {
 		       return baseService.getTrainings(id);
 		}
 	
+	    @PreAuthorize("hasRole('ROLE_ADMIN')")
 		@PostMapping("add")
 		public MilitaryBase add(@RequestBody MilitaryBaseDTO base) throws InvalidDataException
 		{
 			return baseService.create(base);
 		}
 		
-
+	    @PreAuthorize("hasRole('ROLE_ADMIN')")
 		@PutMapping("update")
 		public MilitaryBase update(@RequestBody MilitaryBaseDTO base) {
 		        return baseService.update(base);
@@ -70,7 +67,7 @@ public class MilitaryBaseController {
 		        return baseService.getById(id);
 		    }
 		
-	
+		@PreAuthorize("hasRole('ROLE_ADMIN')")
 		@DeleteMapping("deleteById/{id}")
 		public String deleteById(@PathVariable Long id) {
 			baseService.deleteById(id);
