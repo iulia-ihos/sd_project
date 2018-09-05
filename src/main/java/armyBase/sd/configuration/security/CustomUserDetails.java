@@ -22,20 +22,19 @@ public class CustomUserDetails extends UserDetailed implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
     	List<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
-    	roles.add(new SimpleGrantedAuthority("ROLE_" + getRol()));
-       
+    	roles.add(new SimpleGrantedAuthority("ROLE_" + getRol())); 
         return roles;
     }
 
     @Override
     public String getPassword() {
-    	System.out.println("PAss " + super.getPass());
+    	System.out.println("Pass " + super.getPass());
         return super.getPass();
     }
 
     @Override
     public String getUsername() {
-    	System.out.println("email "+super.getEmail());
+    	System.out.println("email " + super.getEmail());
         return super.getEmail();
     }
 

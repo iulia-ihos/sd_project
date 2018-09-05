@@ -18,6 +18,7 @@ public class HeaderUsernamePasswordAuthenticationFilter extends UsernamePassword
     
     @Override
     protected String obtainPassword(HttpServletRequest request) {
+    	System.out.println("pass " + this.getPasswordParameter());
         return request.getHeader(this.getPasswordParameter());
     }
 
