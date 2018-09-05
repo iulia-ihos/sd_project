@@ -43,14 +43,16 @@
 
             <button th:text="#{armyBase.register}" data-bind = "click : register" 
             class="registerbtn officialColor">Register</button>
-        </div>
+       
 
-        <div class="container signin">
-            <p>Already have an account?
-                <a th:href="@{/login}">Sign in</a>.</p>
-        </div>
+<!--         <div class="container signin"> -->
+<!--             <p>Already have an account? -->
+<!--                 <a th:href="@{/login}">Sign in</a></p> -->
+<!--         </div> -->
+         </div>
     </form>
  </div>
+	
 	<div th:replace="fragments/frag :: footer"></div>
 	
     <script th:src="@{/js/RegisterVM.js}" type="text/javascript"></script>

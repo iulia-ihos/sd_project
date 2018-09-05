@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.2.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true">  
+<class-diagram version="1.2.2" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="armyBase.sd.controller.rest.SoldierController" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/controller/rest/SoldierController.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="609" y="256"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="2" language="java" name="armyBase.sd.dao.SoldierDAO" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/dao/SoldierDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="176" y="947"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="3" language="java" name="armyBase.sd.service.ISoldierService" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/service/ISoldierService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="646" y="639"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="4" language="java" name="armyBase.sd.service.impl.SoldierService" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/service/impl/SoldierService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="647" y="954"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="armyBase.sd.model.Soldier" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/model/Soldier.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="170" y="502"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="armyBase.sd.dto.SoldierDTO" project="sd_project" 
+    file="/sd_project/src/main/java/armyBase/sd/dto/SoldierDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1206" y="409"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="7">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="10">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="11" name="soldierDAO"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="16">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="17" name="soldierService"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="19">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
